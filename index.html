@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EXIF Remover</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Local Privacy Tool</p>
+          <h1>EXIF Remover</h1>
+        </div>
+        <button id="downloadAll" class="ghost" type="button" disabled>Download All</button>
+      </header>
+
+      <section class="workspace">
+        <label id="dropZone" class="drop-zone" for="fileInput">
+          <span>Drop photos here</span>
+          <strong>Select images to clean</strong>
+          <small>JPEG, PNG, and WebP files are re-encoded locally in this browser.</small>
+          <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+        </label>
+
+        <div class="privacy-note">
+          <strong>Local only</strong>
+          <span>No upload route exists in this preview. The browser decodes the image, redraws pixels to a canvas, and exports a new file without embedded metadata.</span>
+        </div>
+
+        <section id="results" class="results" aria-live="polite"></section>
+      </section>
+    </main>
+
+    <template id="rowTemplate">
+      <article class="result-row">
+        <div class="preview"></div>
+        <div class="result-copy">
+          <strong></strong>
+          <span></span>
+        </div>
+        <a class="download" href="#" download>Download</a>
+      </article>
+    </template>
+
+    <script src="./script.js" type="module"></script>
+  </body>
+</html>
