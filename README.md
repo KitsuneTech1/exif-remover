@@ -4,7 +4,7 @@
 
 Strip EXIF and metadata from images entirely in your browser. Nothing gets uploaded.
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: PolyForm Noncommercial](https://img.shields.io/badge/license-PolyForm%20Noncommercial-8250df.svg)](LICENSE)
 
 **[Try it live](https://kitsunetech1.github.io/exif-remover/)**
 
@@ -79,4 +79,4 @@ Re-encoding means recompression. JPEG and WebP outputs are re-encoded at quality
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
+PolyForm Noncommercial 1.0.0 - free for personal and other noncommercial use. Commercial use requires a license from Kitsune Technologies. See [LICENSE](LICENSE).
