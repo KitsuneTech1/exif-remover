@@ -79,4 +79,4 @@ Re-encoding means recompression. JPEG and WebP outputs are re-encoded at quality
 
 ## License
 
-MIT. Copyright (c) 2026 Kitsune Technologies LLC. Do what you like with it, commercially or otherwise, just keep the copyright notice. Full text in [LICENSE](LICENSE).
+MIT. Copyright (c) Kitsune Technologies LLC 2026. Do what you like with it, commercially or otherwise, just keep the copyright notice. Full text in [LICENSE](LICENSE).

@@ -1,3 +1,5 @@
+import { cleanFileName } from "./filename.js";
+
 const fileInput = document.querySelector("#fileInput");
 const dropZone = document.querySelector("#dropZone");
 const results = document.querySelector("#results");
@@ -11,17 +13,6 @@ function formatBytes(bytes) {
   const units = ["B", "KB", "MB", "GB"];
   const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
   return `${(bytes / 1024 ** index).toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
-}
-
-function extensionForType(type) {
-  if (type === "image/png") return "png";
-  if (type === "image/webp") return "webp";
-  return "jpg";
-}
-
-function cleanFileName(fileName, type) {
-  const base = fileName.replace(/\.[^.]+$/, "").trim() || "image";
-  return `${base}-clean.${extensionForType(type)}`;
 }
 
 function canvasToBlob(canvas, type) {

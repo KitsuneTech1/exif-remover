@@ -1,0 +1,9 @@
+.env
+.env.*
+node_modules/
+.venv/
+target/
+dist/
+build/
+coverage/
+.oss31/
