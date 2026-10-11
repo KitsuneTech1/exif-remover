@@ -1,8 +1,8 @@
-<p align="center"><a href="https://kitsunetechnologies.org/work"><img src="https://raw.githubusercontent.com/KitsuneTech1/.github/main/assets/kitsune-banner.svg" alt="Built by Kitsune Technologies" width="760"></a></p>
+﻿<p align="center"><a href="https://kitsunetechnologies.org/work"><img src="https://raw.githubusercontent.com/KitsuneTech1/.github/main/assets/kitsune-banner.svg" alt="Built by Kitsune Technologies" width="760"></a></p>
 
 # EXIF Remover
 
-Strip EXIF and metadata from images entirely in your browser. Nothing gets uploaded.
+Strip EXIF and location metadata from photos in your browser. Nothing is uploaded.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -10,73 +10,72 @@ Strip EXIF and metadata from images entirely in your browser. Nothing gets uploa
 
 ![EXIF Remover screenshot](docs/screenshot.png)
 
-## Features
+## What it does
 
-- Accepts JPEG, PNG, and WebP images.
-- Re-encodes every image through a browser canvas, which drops all embedded metadata.
-- Exports cleaned copies with `-clean` added to the filename.
-- Runs fully client-side. No upload route exists, nothing leaves the browser.
+- Lets you select or drop JPEG, PNG, and WebP images in the browser.
+- Decodes each image and redraws it to a canvas, so EXIF, GPS, and other embedded metadata are not copied.
+- Exports cleaned images with `-clean` added to the filename.
+- Lets you download each cleaned image, plus all cleaned images from the current batch.
+- Serves the same static app locally with a small Node.js server that has no upload route.
 
-## Use it now
+## What you need
 
-No install, nothing leaves your browser. Just open **[the live demo](https://kitsunetech1.github.io/exif-remover/)** and drop an image in. It works the same as running it locally, this is the same code.
+You only need this to run your own copy. To just use the tool, open the [live demo](https://kitsunetech1.github.io/exif-remover/) and drop an image in. Nothing leaves your browser either way.
 
-## Run it yourself
+- Node.js 18 or newer. It only serves the files, it does no processing. Check your version with `node --version` in a terminal. If that prints an error instead of a version, get Node from https://nodejs.org (click the LTS button).
+- Any modern browser (Chrome, Firefox, Edge, or Safari).
 
-You only need this if you want to run your own copy instead of using the live demo above.
+## Install
 
-### What you need
+1. Get the files. If you have git:
 
-- **Node.js 18 or newer** (only needed to serve the files locally, it does no processing). Check with `node --version` in a terminal. If that gives an error instead of a version number, get Node from https://nodejs.org (the "LTS" button is the one you want).
-- Any modern browser (Chrome, Firefox, Edge, Safari).
+   ```powershell
+   git clone https://github.com/KitsuneTech1/exif-remover.git
+   cd exif-remover
+   ```
 
-### Step by step
+   If you do not have git, click the green **Code** button on the GitHub page, choose **Download ZIP**, then right-click the zip and choose **Extract All**.
 
-**Getting the files**
+2. There is nothing to install. The project has no dependencies, so there is no `npm install` step.
 
-If you have git, clone it:
+   Expected output: none. You are ready to run it.
 
-```powershell
-git clone https://github.com/KitsuneTech1/exif-remover.git
-cd exif-remover
-```
+## Use it
 
-If you don't have git, click the green **Code** button on this repo's GitHub page, then **Download ZIP**, then right-click the downloaded zip and choose **Extract All**.
+1. Open a terminal in the `exif-remover` folder. In File Explorer, click the address bar, type `powershell`, and press Enter. That opens a terminal already in the folder.
+2. Start the server:
 
-**Opening a terminal in the right folder**
+   ```powershell
+   node server.js
+   ```
 
-1. Open the extracted (or cloned) `exif-remover` folder in File Explorer.
-2. Click the address bar at the top of the File Explorer window, type `powershell`, and press Enter. This opens a terminal already sitting in that folder.
+   You should see:
 
-**Starting the server**
+   ```
+   EXIF remover preview: http://127.0.0.1:5173
+   ```
 
-3. In that terminal, type:
+3. Open your browser and go to `http://127.0.0.1:5173`.
 
-```powershell
-node server.js
-```
+To stop the server, go back to the terminal and press `Ctrl+C`.
 
-4. You should see a line printed like `EXIF remover preview: http://127.0.0.1:5173`.
-5. Open your browser and go to `http://127.0.0.1:5173`.
+## It worked if
 
-**It worked if:** the page loads and shows the EXIF Remover drop area, and dropping an image in produces a cleaned download with `-clean` in the filename.
+The page loads and shows the EXIF Remover drop area, and dropping an image in produces a cleaned download with `-clean` in the filename.
 
-To stop the server, go back to the terminal window and press `Ctrl+C`.
+## Troubleshooting
 
-**Troubleshooting**
-
-- *`node` is not recognized:* Node.js isn't installed, or you need to close and reopen your terminal after installing it so it picks up the change.
-- *"Not found" in the browser:* make sure the terminal's folder is the `exif-remover` folder itself (the one with `index.html` in it), not a folder above or below it.
-- *Port already in use:* something else on your PC is using port 5173. Run `$env:PORT=5174; node server.js` instead, then open `http://127.0.0.1:5174`.
+- `node` is not recognized as the name of a cmdlet: Node.js is not installed, or you need to close and reopen your terminal after installing it so it finds the new command.
+- `Not found` in the browser: make sure the terminal is in the `exif-remover` folder itself (the one with `index.html` in it), not a folder above or below it.
+- `EADDRINUSE: address already in use 127.0.0.1:5173`: something else is already using port 5173. Run `$env:PORT=5174; node server.js` instead, then open `http://127.0.0.1:5174`.
+- `SyntaxError: Unexpected token` or similar on startup: your Node.js is older than version 18. Run `node --version` and upgrade from https://nodejs.org if it is below `v18`.
 
 ## How it works
 
-The browser decodes the selected image into a canvas and redraws the pixels. The re-encoded output has no EXIF, GPS, or other metadata blocks because none of that data is part of the canvas pixel buffer.
+The browser decodes the selected image into a canvas and redraws the pixels. The re-encoded output has no EXIF, GPS, or other metadata blocks, because none of that is part of the canvas pixel buffer.
 
-## Limitations
-
-Re-encoding means recompression. JPEG and WebP outputs are re-encoded at quality 0.92, so repeated cleaning cycles will lose some quality. Animated images are exported as still frames since the canvas only holds one decoded frame at a time.
+Re-encoding means recompression. JPEG and WebP outputs are re-encoded at quality 0.92, so repeated cleaning cycles lose some quality. Animated images are exported as still frames, since the canvas holds one decoded frame at a time.
 
 ## License
 
-MIT. Copyright (c) Kitsune Technologies LLC 2026. Do what you like with it, commercially or otherwise, just keep the copyright notice. Full text in [LICENSE](LICENSE).
+MIT. Copyright (c) 2026 Kitsune Technologies LLC. Do what you like with it, commercially or otherwise, just keep the copyright notice. Full text in [LICENSE](LICENSE).
