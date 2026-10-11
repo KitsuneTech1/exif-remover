@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const port = Number(process.env.PORT || 5173);
+const host = "127.0.0.1";
 
 const types = new Map([
   [".html", "text/html; charset=utf-8"],
@@ -13,32 +14,50 @@ const types = new Map([
   [".js", "text/javascript; charset=utf-8"]
 ]);
 
-function safePath(urlPath) {
+export function safePath(urlPath, root = __dirname) {
   const requested = urlPath === "/" ? "/index.html" : urlPath;
-  const resolved = path.resolve(__dirname, `.${decodeURIComponent(requested)}`);
-  if (!resolved.startsWith(__dirname + path.sep)) {
+  let decoded;
+
+  try {
+    decoded = decodeURIComponent(requested);
+  } catch {
+    return null;
+  }
+
+  const resolved = path.resolve(root, `.${decoded}`);
+  const relative = path.relative(root, resolved);
+  if (
+    relative === "" ||
+    relative === ".." ||
+    relative.startsWith(`..${path.sep}`) ||
+    path.isAbsolute(relative)
+  ) {
     return null;
   }
   return resolved;
 }
 
-const server = http.createServer((req, res) => {
-  const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
-  const filePath = safePath(url.pathname);
+export function createPreviewServer({ root = __dirname } = {}) {
+  return http.createServer((req, res) => {
+    const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+    const filePath = safePath(url.pathname, root);
 
-  if (!filePath || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
-    res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-    res.end("Not found");
-    return;
-  }
+    if (!filePath || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+      res.end("Not found");
+      return;
+    }
 
-  res.writeHead(200, {
-    "Content-Type": types.get(path.extname(filePath)) || "application/octet-stream",
-    "X-Content-Type-Options": "nosniff"
+    res.writeHead(200, {
+      "Content-Type": types.get(path.extname(filePath)) || "application/octet-stream",
+      "X-Content-Type-Options": "nosniff"
+    });
+    fs.createReadStream(filePath).pipe(res);
   });
-  fs.createReadStream(filePath).pipe(res);
-});
+}
 
-server.listen(port, "127.0.0.1", () => {
-  console.log(`EXIF remover preview: http://127.0.0.1:${port}`);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  createPreviewServer().listen(port, host, () => {
+    console.log(`EXIF remover preview: http://${host}:${port}`);
+  });
+}
