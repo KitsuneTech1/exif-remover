@@ -4,15 +4,15 @@
 
 - Existing tool: static browser app for removing image metadata.
 - Language: plain HTML, CSS, and browser JavaScript. Local preview server uses Node.js ES modules.
-- Build system: none. `package.json` only declares `"type": "module"` and `"license": "MIT"`.
+- Build system: none. `package.json` defines the `start` and `test` scripts and declares `"type": "module"` and `"license": "MIT"`.
 - Runtime: modern browser for the app, Node.js 18 or newer for local preview.
 - Entry points: `index.html`, `script.js`, `styles.css`, and `server.js`.
-- Tests: no automated tests exist yet.
+- Tests: `npm test` runs the built-in Node test suite in `test/app.test.js`.
 - README: present, with live demo link, local run steps, feature list, limitations, and screenshot.
 - License: `LICENSE` is standard MIT text with `Copyright (c) 2026 Kitsune Technologies LLC`.
 - Authors: `AUTHORS.md` is present.
 - Assets: `docs/screenshot.png` is present.
-- Git state before this spec: `.gitignore` exists in the working tree but is untracked.
+- Repository hygiene: `.gitignore` covers local environment files, dependencies, and common build output.
 
 ## Smallest Honest Release
 
@@ -43,15 +43,12 @@ Then open `http://127.0.0.1:5173`.
 
 Testing plan:
 
-- Add a Node test command using the built-in `node:test` runner.
-- Test filename conversion for JPEG, PNG, WebP, and extensionless names.
-- Test that the preview server returns `index.html`, static assets, 404 for missing files, and blocks path traversal.
+- Run `npm test` with the built-in `node:test` runner.
+- Test filename conversion and supported JPEG, PNG, and WebP inputs.
+- Test that the preview server returns `index.html`, static assets, 404 for missing files, blocks path traversal, and rejects upload methods.
 - Manually smoke test the browser flow with a sample JPEG and confirm the cleaned download opens and uses the `-clean` suffix.
 
 ## Release Blockers
 
-- `.gitignore` is untracked and only ignores `.oss31/`. It must also ignore `.env`, `node_modules`, `.venv`, `target`, and build artifacts.
-- There is no automated test command.
-- `package.json` has no `scripts`, so `npm test` and `npm start` do not work.
 - Need a final secrets and path scan before release.
 - Need to confirm the existing GitHub Pages demo is enabled after publish.

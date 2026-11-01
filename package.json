@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node server.js",
-    "test": "node --test"
+    "test": "node test/app.test.js"
   },
   "type": "module",
   "license": "MIT"

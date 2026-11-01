@@ -39,6 +39,15 @@ export function safePath(urlPath, root = __dirname) {
 
 export function createPreviewServer({ root = __dirname } = {}) {
   return http.createServer((req, res) => {
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      res.writeHead(405, {
+        Allow: "GET, HEAD",
+        "Content-Type": "text/plain; charset=utf-8"
+      });
+      res.end("Method not allowed");
+      return;
+    }
+
     const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
     const filePath = safePath(url.pathname, root);
 
@@ -52,6 +61,12 @@ export function createPreviewServer({ root = __dirname } = {}) {
       "Content-Type": types.get(path.extname(filePath)) || "application/octet-stream",
       "X-Content-Type-Options": "nosniff"
     });
+
+    if (req.method === "HEAD") {
+      res.end();
+      return;
+    }
+
     fs.createReadStream(filePath).pipe(res);
   });
 }

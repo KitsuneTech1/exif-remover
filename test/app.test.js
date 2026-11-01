@@ -4,7 +4,7 @@ import { test } from "node:test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { cleanFileName } from "../filename.js";
+import { cleanFileName, isSupportedImageType } from "../filename.js";
 import { createPreviewServer, safePath } from "../server.js";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -29,8 +29,12 @@ function close(server) {
 }
 
 function request(port, pathname) {
+  return requestWithMethod(port, pathname, "GET");
+}
+
+function requestWithMethod(port, pathname, method) {
   return new Promise((resolve, reject) => {
-    const req = http.get({ host: "127.0.0.1", port, path: pathname }, (res) => {
+    const req = http.request({ host: "127.0.0.1", port, path: pathname, method }, (res) => {
       let body = "";
       res.setEncoding("utf8");
       res.on("data", (chunk) => {
@@ -41,6 +45,7 @@ function request(port, pathname) {
       });
     });
     req.on("error", reject);
+    req.end();
   });
 }
 
@@ -50,6 +55,14 @@ test("adds the clean suffix with the expected image extension", () => {
   assert.equal(cleanFileName("diagram.png", "image/png"), "diagram-clean.png");
   assert.equal(cleanFileName("capture.webp", "image/webp"), "capture-clean.webp");
   assert.equal(cleanFileName("untitled", "image/jpeg"), "untitled-clean.jpg");
+});
+
+test("accepts only image types the browser flow can clean", () => {
+  assert.equal(isSupportedImageType("image/jpeg"), true);
+  assert.equal(isSupportedImageType("image/png"), true);
+  assert.equal(isSupportedImageType("image/webp"), true);
+  assert.equal(isSupportedImageType("image/gif"), false);
+  assert.equal(isSupportedImageType("application/octet-stream"), false);
 });
 
 test("serves the static app and returns 404 for missing files", async () => {
@@ -66,9 +79,31 @@ test("serves the static app and returns 404 for missing files", async () => {
     assert.equal(script.statusCode, 200);
     assert.match(script.headers["content-type"], /^text\/javascript/);
 
+    const head = await requestWithMethod(port, "/index.html", "HEAD");
+    assert.equal(head.statusCode, 200);
+    assert.equal(head.body, "");
+
+    const page = await request(port, "/index.html");
+    assert.match(page.body, /accept="image\/jpeg,image\/png,image\/webp"/);
+    assert.match(page.body, /src="\.\/script\.js" type="module"/);
+
     const missing = await request(port, "/missing.txt");
     assert.equal(missing.statusCode, 404);
     assert.equal(missing.body, "Not found");
+  } finally {
+    await close(server);
+  }
+});
+
+test("does not accept upload methods", async () => {
+  const server = createPreviewServer({ root });
+  const port = await listen(server);
+
+  try {
+    const response = await requestWithMethod(port, "/", "POST");
+    assert.equal(response.statusCode, 405);
+    assert.equal(response.headers.allow, "GET, HEAD");
+    assert.equal(response.body, "Method not allowed");
   } finally {
     await close(server);
   }

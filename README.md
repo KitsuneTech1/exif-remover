@@ -63,6 +63,16 @@ To stop the server, go back to the terminal and press `Ctrl+C`.
 
 The page loads and shows the EXIF Remover drop area, and dropping an image in produces a cleaned download with `-clean` in the filename.
 
+## Check it
+
+Run the offline test suite from the project folder:
+
+```powershell
+npm test
+```
+
+The tests use Node's built-in test runner and the local preview server. They do not upload files or make network requests.
+
 ## Troubleshooting
 
 - `node` is not recognized as the name of a cmdlet: Node.js is not installed, or you need to close and reopen your terminal after installing it so it finds the new command.

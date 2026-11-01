@@ -1,4 +1,4 @@
-import { cleanFileName } from "./filename.js";
+import { cleanFileName, isSupportedImageType } from "./filename.js";
 
 const fileInput = document.querySelector("#fileInput");
 const dropZone = document.querySelector("#dropZone");
@@ -86,7 +86,7 @@ function addRow({ file, status, message, url, outputName, cleanSize, width, heig
 }
 
 async function processFiles(fileList) {
-  const files = Array.from(fileList).filter((file) => file.type.startsWith("image/"));
+  const files = Array.from(fileList).filter((file) => isSupportedImageType(file.type));
   if (!files.length) return;
 
   revokePreviousUrls();
