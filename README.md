@@ -7,7 +7,7 @@ Strip EXIF and location metadata from photos in your browser. Nothing is uploade
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![JavaScript](https://img.shields.io/badge/javascript-ES6+-yellow.svg)](https://tc39.es/ecma262/)
 
-**[Try it live](https://kitsunetech1.github.io/exif-remover/)**
+**[Try it live](https://kitsunetechnologies.org/play/photo-scrub/)**
 
 ![EXIF Remover screenshot](docs/screenshot.png)
 
@@ -21,7 +21,7 @@ Strip EXIF and location metadata from photos in your browser. Nothing is uploade
 
 ## What you need
 
-To use the tool online, just open the [live demo](https://kitsunetech1.github.io/exif-remover/) and drop an image in. Nothing leaves your browser.
+To use the tool online, just open the [live demo](https://kitsunetechnologies.org/play/photo-scrub/) and drop an image in. Nothing leaves your browser.
 
 - Node.js 18 or newer. It only serves the files, it does no processing. Check your version with `node --version` in a terminal. If that prints an error instead of a version, get Node from https://nodejs.org (click the LTS button).
 - Any modern browser (Chrome, Firefox, Edge, or Safari).
