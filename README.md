@@ -5,6 +5,7 @@
 Strip EXIF and location metadata from photos in your browser. Nothing is uploaded.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![JavaScript](https://img.shields.io/badge/javascript-ES6+-yellow.svg)](https://tc39.es/ecma262/)
 
 **[Try it live](https://kitsunetech1.github.io/exif-remover/)**
 
@@ -20,48 +21,33 @@ Strip EXIF and location metadata from photos in your browser. Nothing is uploade
 
 ## What you need
 
-You only need this to run your own copy. To just use the tool, open the [live demo](https://kitsunetech1.github.io/exif-remover/) and drop an image in. Nothing leaves your browser either way.
+To use the tool online, just open the [live demo](https://kitsunetech1.github.io/exif-remover/) and drop an image in. Nothing leaves your browser.
 
 - Node.js 18 or newer. It only serves the files, it does no processing. Check your version with `node --version` in a terminal. If that prints an error instead of a version, get Node from https://nodejs.org (click the LTS button).
 - Any modern browser (Chrome, Firefox, Edge, or Safari).
 
-## Install
+## Quick start
 
-1. Get the files. If you have git:
+1. Clone the repo or download the ZIP:
 
    ```powershell
    git clone https://github.com/KitsuneTech1/exif-remover.git
    cd exif-remover
    ```
 
-   If you do not have git, click the green **Code** button on the GitHub page, choose **Download ZIP**, then right-click the zip and choose **Extract All**.
+   No git? Click the green **Code** button on GitHub, choose **Download ZIP**, and extract it.
 
-2. There is nothing to install. The project has no dependencies, so there is no `npm install` step.
-
-   Expected output: none. You are ready to run it.
-
-## Use it
-
-1. Open a terminal in the `exif-remover` folder. In File Explorer, click the address bar, type `powershell`, and press Enter. That opens a terminal already in the folder.
-2. Start the server:
+2. No dependencies to install. Just start the server:
 
    ```powershell
    node server.js
    ```
 
-   You should see:
+3. Open your browser to `http://localhost:5173`.
 
-   ```
-   EXIF remover preview: http://localhost:5173
-   ```
+You should see the drop area. Select or drag an image in to clean it. Downloads have `-clean` added to the filename.
 
-3. Open your browser and go to `http://localhost:5173`.
-
-To stop the server, go back to the terminal and press `Ctrl+C`.
-
-## It worked if
-
-The page loads and shows the EXIF Remover drop area, and dropping an image in produces a cleaned download with `-clean` in the filename.
+Stop the server with `Ctrl+C` in the terminal.
 
 ## Check it
 
