@@ -8,6 +8,10 @@ export function isSupportedImageType(type) {
   return supportedImageTypes.has(type);
 }
 
+export function outputTypeForBlob(requestedType, blobType) {
+  return isSupportedImageType(blobType) ? blobType : requestedType;
+}
+
 export function extensionForType(type) {
   if (type === "image/png") return "png";
   if (type === "image/webp") return "webp";
@@ -15,6 +19,12 @@ export function extensionForType(type) {
 }
 
 export function cleanFileName(fileName, type) {
-  const base = fileName.replace(/\.[^.]+$/, "").trim() || "image";
+  const leafName = String(fileName ?? "").replace(/\\/g, "/").split("/").pop() || "";
+  const base = leafName
+    .replace(/\.[^.]*$/, "")
+    .replace(/[\u0000-\u001f\u007f]/g, "")
+    .replace(/[<>:"/\\|?*]/g, "_")
+    .replace(/[. ]+$/g, "")
+    .trim() || "image";
   return `${base}-clean.${extensionForType(type)}`;
 }

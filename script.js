@@ -1,4 +1,4 @@
-import { cleanFileName, isSupportedImageType } from "./filename.js";
+import { cleanFileName, isSupportedImageType, outputTypeForBlob } from "./filename.js";
 
 const fileInput = document.querySelector("#fileInput");
 const dropZone = document.querySelector("#dropZone");
@@ -47,9 +47,10 @@ async function stripMetadata(file) {
     const context = canvas.getContext("2d", { alpha: outputType !== "image/jpeg" });
     context.drawImage(bitmap, 0, 0);
     const blob = await canvasToBlob(canvas, outputType);
+    const actualOutputType = outputTypeForBlob(outputType, blob.type);
     return {
       blob,
-      outputType,
+      outputType: actualOutputType,
       width: bitmap.width,
       height: bitmap.height
     };
