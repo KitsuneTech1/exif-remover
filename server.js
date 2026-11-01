@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const port = Number(process.env.PORT || 5173);
-const host = "127.0.0.1";
+const host = "localhost";
 
 const types = new Map([
   [".html", "text/html; charset=utf-8"],

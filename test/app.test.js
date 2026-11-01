@@ -12,7 +12,7 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 function listen(server) {
   return new Promise((resolve, reject) => {
     server.once("error", reject);
-    server.listen(0, "127.0.0.1", () => {
+    server.listen(0, "localhost", () => {
       server.off("error", reject);
       resolve(server.address().port);
     });
@@ -34,7 +34,7 @@ function request(port, pathname) {
 
 function requestWithMethod(port, pathname, method) {
   return new Promise((resolve, reject) => {
-    const req = http.request({ host: "127.0.0.1", port, path: pathname, method }, (res) => {
+    const req = http.request({ host: "localhost", port, path: pathname, method }, (res) => {
       let body = "";
       res.setEncoding("utf8");
       res.on("data", (chunk) => {

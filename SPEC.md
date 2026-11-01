@@ -39,7 +39,7 @@ Demo command:
 node server.js
 ```
 
-Then open `http://127.0.0.1:5173`.
+Then open `http://localhost:5173`.
 
 Testing plan:
 

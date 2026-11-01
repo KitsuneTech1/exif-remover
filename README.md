@@ -52,10 +52,10 @@ You only need this to run your own copy. To just use the tool, open the [live de
    You should see:
 
    ```
-   EXIF remover preview: http://127.0.0.1:5173
+   EXIF remover preview: http://localhost:5173
    ```
 
-3. Open your browser and go to `http://127.0.0.1:5173`.
+3. Open your browser and go to `http://localhost:5173`.
 
 To stop the server, go back to the terminal and press `Ctrl+C`.
 
@@ -77,7 +77,7 @@ The tests use Node's built-in test runner and the local preview server. They do 
 
 - `node` is not recognized as the name of a cmdlet: Node.js is not installed, or you need to close and reopen your terminal after installing it so it finds the new command.
 - `Not found` in the browser: make sure the terminal is in the `exif-remover` folder itself (the one with `index.html` in it), not a folder above or below it.
-- `EADDRINUSE: address already in use 127.0.0.1:5173`: something else is already using port 5173. Run `$env:PORT=5174; node server.js` instead, then open `http://127.0.0.1:5174`.
+- `EADDRINUSE: address already in use localhost:5173`: something else is already using port 5173. Run `$env:PORT=5174; node server.js` instead, then open `http://localhost:5174`.
 - `SyntaxError: Unexpected token` or similar on startup: your Node.js is older than version 18. Run `node --version` and upgrade from https://nodejs.org if it is below `v18`.
 
 ## How it works
