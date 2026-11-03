@@ -1,81 +1,101 @@
-﻿<p align="center"><a href="https://kitsunetechnologies.org/work"><img src="https://raw.githubusercontent.com/KitsuneTech1/.github/main/assets/kitsune-banner.svg" alt="Built by Kitsune Technologies" width="760"></a></p>
+<p align="center"><a href="https://kitsunetechnologies.org/work"><img src="https://raw.githubusercontent.com/KitsuneTech1/.github/main/assets/kitsune-banner.svg" alt="Built by Kitsune Technologies" width="760"></a></p>
 
-# EXIF Remover
+# EXIF Remover (Photo Scrub)
 
-Strip EXIF and location metadata from photos in your browser. Nothing is uploaded.
+> Strip EXIF, GPS coordinates, camera serials, and sensitive metadata from photos entirely inside your browser. Zero uploads, zero tracking, 100% offline-capable.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![JavaScript](https://img.shields.io/badge/javascript-ES6+-yellow.svg)](https://tc39.es/ecma262/)
+<p align="center">
+  <a href="https://github.com/KitsuneTech1/exif-remover/releases"><img src="https://img.shields.io/github/v/release/KitsuneTech1/exif-remover?style=flat-square&color=blue" alt="Release"></a>
+  <a href="https://github.com/KitsuneTech1/exif-remover/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/KitsuneTech1/exif-remover/ci.yml?branch=master&label=CI&style=flat-square" alt="CI Status"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License"></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node Version"></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/Dependencies-0-success?style=flat-square" alt="Dependencies"></a>
+  <a href="https://kitsunetechnologies.org/play/photo-scrub/"><img src="https://img.shields.io/badge/Privacy-100%25%20Local-blueviolet?style=flat-square" alt="Privacy First"></a>
+</p>
 
-**[Try it live](https://kitsunetechnologies.org/play/photo-scrub/)**
+<p align="center">
+  <a href="https://kitsunetechnologies.org/play/photo-scrub/"><strong>🌐 Launch Live Web App (Zero Install)</strong></a> •
+  <a href="https://github.com/KitsuneTech1/exif-remover/releases/latest"><strong>📦 Download Standalone Zip</strong></a>
+</p>
+
+---
 
 ![EXIF Remover screenshot](docs/screenshot.png)
 
-## What it does
+## Architecture & Data Flow
 
-- Lets you select or drop JPEG, PNG, and WebP images in the browser.
-- Decodes each image and redraws it to a canvas, so EXIF, GPS, and other embedded metadata are not copied.
-- Exports cleaned images with `-clean` added to the filename.
-- Lets you download each cleaned image, plus all cleaned images from the current batch.
-- Serves the same static app locally with a small Node.js server that has no upload route.
+```mermaid
+flowchart LR
+    A[📷 User Photo<br/>EXIF, GPS, Camera Tags] -->|Drag & Drop| B[HTML5 Canvas Decoder]
+    subgraph Browser Sandbox [100% Local Browser Engine - Zero Network Transfer]
+        B -->|Extract Raw Pixels| C[Canvas Pixel Buffer]
+        C -->|Re-encode Clean Image| D[Sanitized Image Blob]
+    end
+    D -->|Instant Download| E[💾 photo-clean.jpg / png]
+```
 
-## What you need
+## Features
 
-To use the tool online, just open the [live demo](https://kitsunetechnologies.org/play/photo-scrub/) and drop an image in. Nothing leaves your browser.
+- **True Client-Side Scrubbing**: Photos never leave your device. All decoding and re-rendering happen in memory via the browser Canvas API.
+- **Batch Processing**: Drop single files or entire batches of JPEG, PNG, and WebP images.
+- **Zero Dependencies**: Pure HTML5/JavaScript without external tracking scripts, heavy frameworks, or backend processing.
+- **Enterprise Ready**: Includes zero-config preview server, path-traversal hardened file serving, and comprehensive offline test suite.
 
-- Node.js 18 or newer. It only serves the files, it does no processing. Check your version with `node --version` in a terminal. If that prints an error instead of a version, get Node from https://nodejs.org (click the LTS button).
-- Any modern browser (Chrome, Firefox, Edge, or Safari).
+---
 
-## Quick start
+## 🚀 Quick Start for Beginners (No Setup Required)
 
-1. Clone the repo or download the ZIP:
+### Option 1: Use the Online Version (Instant)
+Just open **[https://kitsunetechnologies.org/play/photo-scrub/](https://kitsunetechnologies.org/play/photo-scrub/)** in any browser. Drag and drop your images to sanitize them immediately.
 
-   ```powershell
-   git clone https://github.com/KitsuneTech1/exif-remover.git
-   cd exif-remover
-   ```
+### Option 2: Run Locally (One Click)
+1. Download the [Latest Release ZIP](https://github.com/KitsuneTech1/exif-remover/releases/latest) and unzip it.
+2. Double-click **`start.bat`** (Windows) or execute `./start.sh` (macOS/Linux).
+3. The app automatically launches in your default browser at `http://localhost:5173`.
 
-   No git? Click the green **Code** button on GitHub, choose **Download ZIP**, and extract it.
+---
 
-2. No dependencies to install. Just start the server:
+## 💻 Developer & Self-Hosting Guide
 
-   ```powershell
-   node server.js
-   ```
+### Prerequisites
+- Node.js 18 or higher (only used for local static serving; no processing is done by Node).
 
-3. Open your browser to `http://localhost:5173`.
+### Clone & Run
 
-You should see the drop area. Select or drag an image in to clean it. Downloads have `-clean` added to the filename.
+```bash
+# Clone the repository
+git clone https://github.com/KitsuneTech1/exif-remover.git
+cd exif-remover
 
-Stop the server with `Ctrl+C` in the terminal.
+# Start local server (default port 5173)
+node server.js
+```
 
-## Check it
+### Automated Testing
 
-Run the offline test suite from the project folder:
+Run the built-in offline test suite:
 
-```powershell
+```bash
 npm test
 ```
 
-The tests use Node's built-in test runner and the local preview server. They do not upload files or make network requests.
+Tests verify:
+- Safe filename sanitization and clean extension suffixes.
+- Security hardening (symlink confinement, path traversal protection, no upload routes).
+- MIME type restrictions and error handling.
 
-## Troubleshooting
+---
 
-- `node` is not recognized as the name of a cmdlet: Node.js is not installed, or you need to close and reopen your terminal after installing it so it finds the new command.
-- `Not found` in the browser: make sure the terminal is in the `exif-remover` folder itself (the one with `index.html` in it), not a folder above or below it.
-- `EADDRINUSE: address already in use localhost:5173`: something else is already using port 5173. Run `$env:PORT=5174; node server.js` instead, then open `http://localhost:5174`.
-- `SyntaxError: Unexpected token` or similar on startup: your Node.js is older than version 18. Run `node --version` and upgrade from https://nodejs.org if it is below `v18`.
+## 🔒 Security & Privacy Model
 
-## How it works
+The application operates under a strict offline security boundary:
+- **No Upload Routes**: The included preview server only serves static assets and rejects any POST/PUT requests.
+- **Pixel Redraw Technique**: Strips metadata by drawing raw pixel data onto a canvas context rather than trying to selectively parse or mask EXIF tags. Any non-pixel byte streams (GPS coordinates, camera serials, thumbnail caches) are discarded completely.
 
-The browser decodes the selected image into a canvas and redraws the pixels. The re-encoded output has no EXIF, GPS, or other metadata blocks, because none of that is part of the canvas pixel buffer.
-
-Re-encoding means recompression. JPEG and WebP outputs are re-encoded at quality 0.92, so repeated cleaning cycles lose some quality. Animated images are exported as still frames, since the canvas holds one decoded frame at a time.
+---
 
 ## License
 
-MIT. Copyright (c) 2026 Kitsune Technologies LLC. Do what you like with it, commercially or otherwise, just keep the copyright notice. Full text in [LICENSE](LICENSE).
-
----
+MIT. Copyright (c) 2026 Kitsune Technologies LLC. Full text in [LICENSE](LICENSE).
 
 <p align="center"><sub>Part of <b>Buildtober 2026</b>: 31 open source projects in 31 days. Built by <a href="https://kitsunetechnologies.org/work">Kitsune Technologies</a>. More at <a href="https://github.com/KitsuneTech1">github.com/KitsuneTech1</a>.</sub></p>
